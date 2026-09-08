@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Silva Drinks - Agendamento de Eventos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandPink: '#ff2a8d',
+                        brandPurple: '#7c3aed',
+                        brandDark: '#07050b',
+                        brandCard: '#130f1e'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Efeito Neon e Pisca-Pisca */
+        .neon-glow {
+            filter: drop-shadow(0 0 12px rgba(255, 42, 141, 0.8));
+        }
+        .neon-box {
+            box-shadow: 0 0 25px rgba(255, 42, 141, 0.15);
+        }
+
+        /* Animação de Letreiro Neon Piscando */
+        @keyframes neonFlicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                color: #ff2a8d;
+                border-color: rgba(255, 42, 141, 0.8);
+                text-shadow: 0 0 8px #ff2a8d, 0 0 20px #ff2a8d, 0 0 40px #ff2a8d;
+                box-shadow: 0 0 10px rgba(255, 42, 141, 0.6), inset 0 0 10px rgba(255, 42, 141, 0.4);
+            }
+            20%, 24%, 55% {
+                color: #4a0025;
+                border-color: rgba(255, 42, 141, 0.2);
+                text-shadow: none;
+                box-shadow: none;
+            }
+        }
+
+        .neon-sign {
+            animation: neonFlicker 3s infinite alternate;
+            border: 2px solid #ff2a8d;
+            background-color: rgba(20, 5, 15, 0.8);
+        }
+
+        /* Estilo Jukebox Neon Exclusivo Rosa/Magenta Puro */
+        .jukebox-panel {
+            background: linear-gradient(135deg, rgba(25, 5, 20, 0.98), rgba(10, 2, 8, 0.99));
+            border: 2px solid #ff2a8d;
+            box-shadow: 0 0 18px rgba(255, 42, 141, 0.45), inset 0 0 15px rgba(255, 42, 141, 0.2);
+            animation: jukeboxPulse 3.5s infinite alternate;
+        }
+
+        @keyframes jukeboxPulse {
+            0% { border-color: rgba(255, 42, 141, 0.7); box-shadow: 0 0 10px rgba(255, 42, 141, 0.4), inset 0 0 8px rgba(255, 42, 141, 0.2); }
+            100% { border-color: #ff5cadd6; box-shadow: 0 0 22px rgba(255, 42, 141, 0.8), inset 0 0 15px rgba(255, 42, 141, 0.4); }
+        }
+
+        /* Animação para os itens de fundo piscarem com luz neon */
+        @keyframes bgNeonPulse {
+            0%, 100% { opacity: 0.15; filter: drop-shadow(0 0 2px #ff2a8d); }
+            50% { opacity: 0.6; filter: drop-shadow(0 0 12px #ff2a8d); }
+        }
+
+        .party-bg-item {
+            position: absolute;
+            animation: bgNeonPulse 4s infinite ease-in-out;
+            user-select: none;
+            pointer-events: none;
+            font-size: 2rem;
+        }
+
+        /* Fundo geral com luzes de festa */
+        body {
+            background-color: #07050b;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(255, 42, 141, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(124, 58, 237, 0.15) 0%, transparent 45%);
+            background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body class="text-gray-100 font-sans antialiased min-h-screen">
+
+    <!-- Itens de Festa com Neon no Background -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <span class="party-bg-item" style="top: 10%; left: 5%; animation-delay: 0s;">🍸</span>
+        <span class="party-bg-item" style="top: 25%; left: 90%; animation-delay: 1.2s;">🍹</span>
+        <span class="party-bg-item" style="top: 50%; left: 8%; animation-delay: 2.5s;">🍻</span>
+        <span class="party-bg-item" style="top: 75%; left: 85%; animation-delay: 0.8s;">🥂</span>
+        <span class="party-bg-item" style="top: 90%; left: 15%; animation-delay: 3.1s;">🍾</span>
+        <span class="party-bg-item" style="top: 15%; left: 75%; animation-delay: 1.8s;">✨</span>
+        <span class="party-bg-item" style="top: 45%; left: 92%; animation-delay: 2.2s;">🎵</span>
+        <span class="party-bg-item" style="top: 65%; left: 3%; animation-delay: 0.5s;">⭐</span>
+        <span class="party-bg-item" style="top: 35%; left: 20%; animation-delay: 3.5s;">🥤</span>
+        <span class="party-bg-item" style="top: 85%; left: 50%; animation-delay: 1.5s;">🎉</span>
+    </div>
+
+    <!-- Header com a Logomarca e Painel Rádio No Silva Drinks -->
+    <header class="bg-black/95 backdrop-blur-md border-b border-pink-500/30 py-3 sticky top-0 z-50 shadow-2xl">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-3 relative z-10">
+            <div class="flex items-center space-x-3">
+                <img src="file:///D:/NOSILVA_DRINKS/NOSILVADRINKS.png" alt="No Silva Drinks Logo" class="h-12 w-auto object-contain neon-glow">
+                <span class="text-xl font-black tracking-wider text-white">NO SILVA <span class="text-brandPink">DRINKS</span></span>
+            </div>
+
+            <!-- PAINEL RÁDIO NO SILVA DRINKS -->
+            <div class="jukebox-panel rounded-2xl px-4 py-2 flex items-center space-x-4">
+                <div class="text-brandPink animate-bounce text-xl drop-shadow-[0_0_8px_#ff2a8d]">💿</div>
+                <div class="text-left">
+                    <p class="text-[10px] text-pink-300 font-black uppercase tracking-widest drop-shadow-[0_0_5px_#ff2a8d]">⚡ RÁDIO NO SILVA DRINKS ⚡</p>
+                    <p id="nomeMusica" class="text-xs font-bold text-white truncate max-w-[160px] sm:max-w-[200px] tracking-wide">Carregando som...</p>
+                </div>
+                <div class="flex items-center space-x-2 pl-3 border-l border-pink-500/40">
+                    <button onclick="musicaAnterior()" class="w-8 h-8 flex items-center justify-center bg-[#240314] border border-brandPink text-white rounded-xl hover:bg-brandPink hover:text-white transition shadow-[0_0_10px_rgba(255,42,141,0.5)] focus:outline-none" title="Música Anterior">⏮</button>
+                    <button id="btnPlayPause" onclick="togglePlayPause()" class="w-9 h-9 flex items-center justify-center bg-brandPink text-white font-bold rounded-xl hover:bg-pink-600 transition shadow-[0_0_14px_rgba(255,42,141,0.9)] hover:scale-105 focus:outline-none" title="Play/Pause">▶</button>
+                    <button onclick="proximaMusica()" class="w-8 h-8 flex items-center justify-center bg-[#240314] border border-brandPink text-white rounded-xl hover:bg-brandPink hover:text-white transition shadow-[0_0_10px_rgba(255,42,141,0.5)] focus:outline-none" title="Próxima Música">⏭</button>
+                </div>
+            </div>
+
+            <nav class="space-x-2">
+                <button onclick="mudarAba('agendar')" id="btnAgendar" class="bg-brandPink/20 border border-brandPink text-pink-300 px-3 py-1.5 rounded-xl text-sm font-semibold transition hover:bg-brandPink hover:text-white">Agendar</button>
+                <button onclick="mudarAba('admin')" id="btnAdmin" class="text-gray-400 hover:text-brandPink px-3 py-1.5 rounded-xl text-sm font-medium transition">Admin</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Elemento de Áudio Oculto -->
+    <audio id="audioPlayer" onended="proximaMusica()"></audio>
+
+    <!-- Main Container -->
+    <main class="container mx-auto px-4 py-10 max-w-4xl relative z-10">
+
+        <!-- ABA 1: AGENDAMENTO / ORÇAMENTO -->
+        <section id="aba-agendar" class="space-y-8">
+            <div class="text-center space-y-4">
+                <div class="inline-block px-5 py-2 rounded-2xl neon-sign text-xs sm:text-sm font-black uppercase tracking-widest transition-all">
+                    ⚡ OPEN BAR PARA FESTAS E FAMÍLIA ⚡
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-white">Leve a <span class="text-brandPink drop-shadow-[0_0_15px_rgba(255,42,141,0.6)]">No Silva Drinks</span> para sua Festa!</h1>
+                <p class="text-gray-400 max-w-lg mx-auto">Transforme sua comemoração com uma estrutura de bar profissional, drinks incríveis e muita energia.</p>
+            </div>
+
+            <div class="bg-brandCard/90 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-pink-500/20 neon-box space-y-6">
+                <form id="formAgendamento" onsubmit="salvarAgendamento(event)" class="space-y-5">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-pink-300 mb-2">Seu Nome</label>
+                            <input type="text" id="nome" required class="w-full bg-black/60 border border-gray-800 rounded-xl p-3.5 text-white focus:border-brandPink focus:ring-1 focus:ring-brandPink focus:outline-none transition" placeholder="Ex: Carlos Silva">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-pink-300 mb-2">WhatsApp / Telefone</label>
+                            <input type="text" id="telefone" required class="w-full bg-black/60 border border-gray-800 rounded-xl p-3.5 text-white focus:border-brandPink focus:ring-1 focus:ring-brandPink focus:outline-none transition" placeholder="(00) 00000-0000">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="block text-sm font-semibold text-pink-300 mb-2">Data do Evento</label>
+                            <input type="date" id="data" required class="w-full bg-black/60 border border-gray-800 rounded-xl p-3.5 text-white focus:border-brandPink focus:ring-1 focus:ring-brandPink focus:outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-pink-300 mb-2">Número de Convidados</label>
+                            <input type="number" id="convidados" min="10" value="30" oninput="calcularOrcamento()" required class="w-full bg-black/60 border border-gray-800 rounded-xl p-3.5 text-white focus:border-brandPink focus:ring-1 focus:ring-brandPink focus:outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-pink-300 mb-2">Escolha o Pacote</label>
+                        <select id="pacote" onchange="calcularOrcamento()" class="w-full bg-black/60 border border-gray-800 rounded-xl p-3.5 text-white focus:border-brandPink focus:ring-1 focus:ring-brandPink focus:outline-none transition">
+                            <option value="essencial">Pacote Essencial (3 Drinks, 1 Bartender) - R$ 15,00 por pessoa</option>
+                            <option value="premium">Pacote Premium (5 Drinks + Mocktails, Bar Móvel, 2 Bartenders) - R$ 25,00 por pessoa</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-pink-950/40 to-purple-950/40 border border-brandPink/40 rounded-2xl p-5 flex justify-between items-center shadow-inner">
+                        <div>
+                            <p class="text-xs text-pink-300 font-semibold uppercase tracking-wider">Estimativa de Investimento:</p>
+                            <p id="valorTotal" class="text-3xl font-black text-brandPink drop-shadow-[0_0_10px_rgba(255,42,141,0.5)]">R$ 450,00</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-400">Taxa de Sinal (30%):</p>
+                            <p id="valorSinal" class="text-base font-bold text-gray-200">R$ 135,00</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-brandPink via-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-black text-lg py-4 rounded-xl shadow-lg shadow-brandPink/40 transition transform active:scale-[0.98]">
+                        🚀 Confirmar Agendamento / Solicitar Bar
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- ABA 2: PAINEL ADMINISTRATIVO -->
+        <section id="aba-admin" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight text-white">Painel de Controle</h1>
+                    <p class="text-gray-400">Gerencie os eventos familiares agendados.</p>
+                </div>
+                <button onclick="limparEventos()" class="bg-red-950/50 border border-red-600/60 text-red-300 hover:bg-red-900/60 px-4 py-2 rounded-xl text-sm font-semibold transition">Limpar Lista</button>
+            </div>
+
+            <div class="bg-brandCard/90 backdrop-blur-xl rounded-3xl border border-pink-500/20 shadow-2xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-black/60 text-pink-400 text-xs uppercase tracking-wider border-b border-gray-800">
+                                <th class="p-4">Cliente</th>
+                                <th class="p-4">Contato</th>
+                                <th class="p-4">Data</th>
+                                <th class="p-4">Convidados</th>
+                                <th class="p-4">Pacote</th>
+                                <th class="p-4">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaAgendamentos" class="divide-y divide-gray-800/60 text-sm">
+                            <!-- Inserido via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="semEventos" class="p-12 text-center text-gray-500">
+                    Nenhum agendamento realizado até o momento.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // --- LISTA COM OS NOMES REAIS DOS ARQUIVOS DA PASTA Musicas ---
+        const playlistOriginal = [
+            { titulo: "Avicii - SOS", arquivo: "Avicii - SOS (Pascal Junior Remix).mp3" },
+            { titulo: "Dj Goja x Lunis - Crazy", arquivo: "Dj Goja x Lunis - Crazy.mp3" },
+            { titulo: "Dj Ramezz & Alyona More", arquivo: "Dj Ramezz _ Alyona More _ More 2021 (128 kbps).mp3" },
+            { titulo: "Dr. Dre ft. Snoop Dogg - Still D.R.E.", arquivo: "Dr. Dre - Still D.R.E. ft. Snoop Dogg - DrDrEVEO (youtube).mp3" },
+            { titulo: "Eminem ft. Dido - Stan", arquivo: "Eminem - Stan (Lyrics) ft. Dido - 7clouds (youtube).mp3" },
+            { titulo: "Funk da Quebrada - MC Poze, MC Ryan SP", arquivo: "EU PREFIRO A RUA - MC Poze do Rodo, MC Ryan SP, MC Rodrigo do CN e Real Fubá (Web Clipe) - FUNK DA QUEBRADA (youtube).mp3" },
+            { titulo: "MC Jacaré - Poupa no Chão", arquivo: "MC JACARÉ - POUPA NO CHÃO (Clipe Oficial) - MC Jacaré (youtube).mp3" },
+            { titulo: "MC Jacaré & Luan Pereira - Senta Pro Bruto", arquivo: "MC JACARÉ, LUAN PEREIRA - SENTA PRO BRUTO (Clipe Oficial) - MC Jacaré (youtube).mp3" },
+            { titulo: "Noel - Silent Morning", arquivo: "Noel _ Silent Morning (Extended Version).mp3" },
+            { titulo: "Pau Pra Toda Obra - MC Jacaré, MC Ryan SP", arquivo: "PAU PRA TODA OBRA - MC Jacaré, MC Ryan SP, MC Lele JP e MC IG - Bololo Records (youtube).mp3" },
+            { titulo: "Racionais MC's - Oitavo Anjo", arquivo: "Racionais Mc's - Oitavo Anjo.mp3" },
+            { titulo: "Tabba X Dj Goja - Tonight", arquivo: "Tabba X Dj Goja - Tonight (Official Single).mp3" },
+            { titulo: "Timi Kullai & Dj Ramezz - Take Your Chance", arquivo: "Timi Kullai _ Dj Ramezz _ Fun Factory - Take Your Chance Remix 2021 .mp3" },
+            { titulo: "Timi Kullai & Dj Ramezz - Never Alone", arquivo: "Timi Kullai _ Dj Ramezz _ Never Alone 2022 (2 Brothers On The 4-th Floor-Cover) (128 kbps).mp3" }
+        ];
+
+        let playlistEmbaralhada = [];
+        let musicaAtualIndex = 0;
+        const audioPlayer = document.getElementById('audioPlayer');
+        const nomeMusicaEl = document.getElementById('nomeMusica');
+        const btnPlayPauseEl = document.getElementById('btnPlayPause');
+
+        // Função para embaralhar a playlist de forma totalmente aleatória (Shuffle)
+        function embaralharPlaylist(array) {
+            let copia = [...array];
+            for (let i = copia.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copia[i], copia[j]] = [copia[j], copia[i]];
+            }
+            return copia;
+        }
+
+        function carregarMusica(index) {
+            if (playlistEmbaralhada.length === 0) return;
+            // Codifica o nome do arquivo corretamente para o navegador ler espaços e caracteres especiais
+            const caminhoArquivo = "Musicas/" + encodeURIComponent(playlistEmbaralhada[index].arquivo);
+            audioPlayer.src = caminhoArquivo;
+            nomeMusicaEl.innerText = playlistEmbaralhada[index].titulo;
+        }
+
+        function togglePlayPause() {
+            if (audioPlayer.paused) {
+                audioPlayer.play().then(() => {
+                    btnPlayPauseEl.innerText = "⏸";
+                }).catch(e => {
+                    console.error("Erro ao reproduzir áudio:", e);
+                    alert("Aviso: Para tocar arquivos locais direto no navegador sem bloqueio de segurança, utilize um servidor local (como o Live Server no VS Code) ou hospede no GitHub Pages.");
+                });
+            } else {
+                audioPlayer.pause();
+                btnPlayPauseEl.innerText = "▶";
+            }
+        }
+
+        function proximaMusica() {
+            musicaAtualIndex++;
+            if (musicaAtualIndex >= playlistEmbaralhada.length) {
+                playlistEmbaralhada = embaralharPlaylist(playlistOriginal);
+                musicaAtualIndex = 0;
+            }
+            carregarMusica(musicaAtualIndex);
+            audioPlayer.play().catch(err => console.log(err));
+            btnPlayPauseEl.innerText = "⏸";
+        }
+
+        function musicaAnterior() {
+            musicaAtualIndex--;
+            if (musicaAtualIndex < 0) {
+                musicaAtualIndex = playlistEmbaralhada.length - 1;
+            }
+            carregarMusica(musicaAtualIndex);
+            audioPlayer.play().catch(err => console.log(err));
+            btnPlayPauseEl.innerText = "⏸";
+        }
+
+        // --- SISTEMA DE ABAS E AGENDAMENTOS ---
+        function mudarAba(aba) {
+            const secAgendar = document.getElementById('aba-agendar');
+            const secAdmin = document.getElementById('aba-admin');
+            const btnAgendar = document.getElementById('btnAgendar');
+            const btnAdmin = document.getElementById('btnAdmin');
+
+            if (aba === 'agendar') {
+                secAgendar.classList.remove('hidden');
+                secAdmin.classList.add('hidden');
+                btnAgendar.className = "bg-brandPink/20 border border-brandPink text-pink-300 px-3 py-1.5 rounded-xl text-sm font-semibold transition hover:bg-brandPink hover:text-white";
+                btnAdmin.className = "text-gray-400 hover:text-brandPink px-3 py-1.5 rounded-xl text-sm font-medium transition";
+            } else {
+                secAgendar.classList.add('hidden');
+                secAdmin.classList.remove('hidden');
+                btnAdmin.className = "bg-brandPink/20 border border-brandPink text-pink-300 px-3 py-1.5 rounded-xl text-sm font-semibold transition hover:bg-brandPink hover:text-white";
+                btnAgendar.className = "text-gray-400 hover:text-gray-300 px-3 py-1.5 rounded-xl text-sm font-medium transition";
+                carregarAgendamentos();
+            }
+        }
+
+        function calcularOrcamento() {
+            const convidados = parseInt(document.getElementById('convidados').value) || 0;
+            const pacote = document.getElementById('pacote').value;
+            
+            let precoPorPessoa = pacote === 'essencial' ? 15 : 25;
+            let total = convidados * precoPorPessoa;
+
+            if (total < 300 && convidados > 0) total = 300; 
+
+            document.getElementById('valorTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('valorSinal').innerText = `R$ ${(total * 0.3).toFixed(2).replace('.', ',')}`;
+            return total;
+        }
+
+        function salvarAgendamento(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const data = document.getElementById('data').value;
+            const convidados = document.getElementById('convidados').value;
+            const pacote = document.getElementById('pacote').value;
+            const totalCalculado = document.getElementById('valorTotal').innerText;
+
+            const novoAgendamento = {
+                id: Date.now(),
+                nome,
+                telefone,
+                data,
+                convidados,
+                pacote: pacote.toUpperCase(),
+                total: totalCalculado
+            };
+
+            let eventos = JSON.parse(localStorage.getItem('nosilva_eventos')) || [];
+            eventos.push(novoAgendamento);
+            localStorage.setItem('nosilva_eventos', JSON.stringify(eventos));
+
+            alert(`Parabéns, ${nome}! Seu pré-agendamento foi realizado com sucesso. Entraremos em contato via WhatsApp.`);
+            
+            document.getElementById('formAgendamento').reset();
+            calcularOrcamento();
+        }
+
+        function carregarAgendamentos() {
+            const tbody = document.getElementById('listaAgendamentos');
+            const avisoSemEventos = document.getElementById('semEventos');
+            let eventos = JSON.parse(localStorage.getItem('nosilva_eventos')) || [];
+
+            tbody.innerHTML = '';
+
+            if (eventos.length === 0) {
+                avisoSemEventos.classList.remove('hidden');
+                return;
+            }
+
+            avisoSemEventos.classList.add('hidden');
+
+            eventos.forEach(ev => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-pink-950/25 transition';
+                tr.innerHTML = `
+                    <td class="p-4 font-semibold text-white">${ev.nome}</td>
+                    <td class="p-4 text-gray-300">${ev.telefone}</td>
+                    <td class="p-4 text-gray-300">${ev.data.split('-').reverse().join('/')}</td>
+                    <td class="p-4 text-gray-300">${ev.convidados} pessoas</td>
+                    <td class="p-4"><span class="bg-pink-900/40 text-pink-300 px-2.5 py-1 rounded-lg text-xs font-bold border border-pink-700/50">${ev.pacote}</span></td>
+                    <td class="p-4 font-black text-brandPink">${ev.total}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function limparEventos() {
+            if(confirm("Deseja apagar todos os registros de agendamento?")) {
+                localStorage.removeItem('nosilva_eventos');
+                carregarAgendamentos();
+            }
+        }
+
+        // Inicialização ao carregar a página
+        window.onload = function() {
+            calcularOrcamento();
+            // Embaralha e prepara as músicas reais da pasta assim que o site abre
+            playlistEmbaralhada = embaralharPlaylist(playlistOriginal);
+            musicaAtualIndex = 0;
+            carregarMusica(musicaAtualIndex);
+        }
+    </script>
+</body>
+</html>
