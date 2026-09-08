@@ -64,6 +64,25 @@
             100% { border-color: #ff5cadd6; box-shadow: 0 0 22px rgba(255, 42, 141, 0.8), inset 0 0 15px rgba(255, 42, 141, 0.4); }
         }
 
+        /* Efeito de Letreiro Correndo na Horizontal (Marquee) */
+        .marquee-container {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 170px; /* Largura fixa do visor da rádio */
+            position: relative;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollMarquee 12s linear infinite;
+        }
+
+        @keyframes scrollMarquee {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+
         /* Animação para os itens de fundo piscarem com luz neon */
         @keyframes bgNeonPulse {
             0%, 100% { opacity: 0.15; filter: drop-shadow(0 0 2px #ff2a8d); }
@@ -78,7 +97,6 @@
             font-size: 2rem;
         }
 
-        /* Fundo geral com luzes de festa */
         body {
             background-color: #07050b;
             background-image: 
@@ -114,12 +132,14 @@
                 <span class="text-xl font-black tracking-wider text-white">NO SILVA <span class="text-brandPink">DRINKS</span></span>
             </div>
 
-            <!-- PAINEL RÁDIO NO SILVA DRINKS -->
+            <!-- PAINEL RÁDIO NO SILVA DRINKS COM LETREIRO CORRENDO -->
             <div class="jukebox-panel rounded-2xl px-4 py-2 flex items-center space-x-4">
                 <div class="text-brandPink animate-bounce text-xl drop-shadow-[0_0_8px_#ff2a8d]">💿</div>
                 <div class="text-left">
                     <p class="text-[10px] text-pink-300 font-black uppercase tracking-widest drop-shadow-[0_0_5px_#ff2a8d]">⚡ RÁDIO NO SILVA DRINKS ⚡</p>
-                    <p id="nomeMusica" class="text-xs font-bold text-white truncate max-w-[160px] sm:max-w-[200px] tracking-wide">Carregando som...</p>
+                    <div class="marquee-container">
+                        <p id="nomeMusica" class="marquee-text text-xs font-bold text-white tracking-wide">Carregando som...</p>
+                    </div>
                 </div>
                 <div class="flex items-center space-x-2 pl-3 border-l border-pink-500/40">
                     <button onclick="musicaAnterior()" class="w-8 h-8 flex items-center justify-center bg-[#240314] border border-brandPink text-white rounded-xl hover:bg-brandPink hover:text-white transition shadow-[0_0_10px_rgba(255,42,141,0.5)] focus:outline-none" title="Música Anterior">⏮</button>
@@ -240,7 +260,7 @@
 
     <!-- Scripts -->
     <script>
-        // --- LISTA COM OS NOMES REAIS DOS ARQUIVOS DA PASTA Musicas ---
+        // --- LISTA COM OS NOMES REAIS DOS ARQUIVOS NA PASTA Musicas ---
         const playlistOriginal = [
             { titulo: "Avicii - SOS", arquivo: "Avicii - SOS (Pascal Junior Remix).mp3" },
             { titulo: "Dj Goja x Lunis - Crazy", arquivo: "Dj Goja x Lunis - Crazy.mp3" },
@@ -264,7 +284,6 @@
         const nomeMusicaEl = document.getElementById('nomeMusica');
         const btnPlayPauseEl = document.getElementById('btnPlayPause');
 
-        // Função para embaralhar a playlist de forma totalmente aleatória (Shuffle)
         function embaralharPlaylist(array) {
             let copia = [...array];
             for (let i = copia.length - 1; i > 0; i--) {
@@ -276,7 +295,6 @@
 
         function carregarMusica(index) {
             if (playlistEmbaralhada.length === 0) return;
-            // Codifica o nome do arquivo corretamente para o navegador ler espaços e caracteres especiais
             const caminhoArquivo = "Musicas/" + encodeURIComponent(playlistEmbaralhada[index].arquivo);
             audioPlayer.src = caminhoArquivo;
             nomeMusicaEl.innerText = playlistEmbaralhada[index].titulo;
@@ -288,7 +306,6 @@
                     btnPlayPauseEl.innerText = "⏸";
                 }).catch(e => {
                     console.error("Erro ao reproduzir áudio:", e);
-                    alert("Aviso: Para tocar arquivos locais direto no navegador sem bloqueio de segurança, utilize um servidor local (como o Live Server no VS Code) ou hospede no GitHub Pages.");
                 });
             } else {
                 audioPlayer.pause();
@@ -317,7 +334,6 @@
             btnPlayPauseEl.innerText = "⏸";
         }
 
-        // --- SISTEMA DE ABAS E AGENDAMENTOS ---
         function mudarAba(aba) {
             const secAgendar = document.getElementById('aba-agendar');
             const secAdmin = document.getElementById('aba-admin');
@@ -418,10 +434,8 @@
             }
         }
 
-        // Inicialização ao carregar a página
         window.onload = function() {
             calcularOrcamento();
-            // Embaralha e prepara as músicas reais da pasta assim que o site abre
             playlistEmbaralhada = embaralharPlaylist(playlistOriginal);
             musicaAtualIndex = 0;
             carregarMusica(musicaAtualIndex);
